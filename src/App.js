@@ -17,8 +17,8 @@ export default class App extends Component{
       <BrowserRouter>
         <Switch>
           <Route path='/login' component={Login}/>
-          <Route path='/admin' component={Admin}/>
-          <Redirect to='/login'/>
+          <Route path='/' component={Admin}/>
+          <Redirect to='/admin'/>
         </Switch>
       </BrowserRouter>
     )
