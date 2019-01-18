@@ -86,7 +86,7 @@ class LoginForm extends Component{
     render(){
         const Item = Form.Item
         const {getFieldDecorator} = this.props.form
-        // this.props.form.getFieldValue('username')
+        this.props.form.getFieldValue('username')
         return (
             <Form className="login-form">
                 <Item>

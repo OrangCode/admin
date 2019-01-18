@@ -27,7 +27,7 @@ export default {
         setItem('user-key',user)
     },
     getUser(){
-        getItem('user-key')
+        return getItem('user-key')
     },
     removeUser(){
         removeItem('user-key')

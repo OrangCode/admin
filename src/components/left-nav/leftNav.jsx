@@ -9,6 +9,7 @@ import logo from '../../assets/image/logo.png'
 
 const {SubMenu,Item} = Menu
 class LeftNav extends Component {
+    //递归遍历menuList
     getNodes = (list) => {
         return list.reduce((pre,item) => {
             if(item.children){
@@ -20,6 +21,9 @@ class LeftNav extends Component {
                     </SubMenu>
                 )
                 pre.push(subMenu)
+                const path = this.props.location.pathname
+                const oItem = item.children.find((child => child.key === path))
+                if(oItem){this.openKey = item.key}
             }else {
                 const menuItem = (
                     <Item key={item.key}>
@@ -33,10 +37,10 @@ class LeftNav extends Component {
             return pre
         },[])
     }
+
     //在第一次render之前调用
     componentWillMount() {
         this.menuNodes = this.getNodes(menuList)
-        console.log(this.menuNodes)
     }
     render() {
         //当前请求的路径
@@ -47,7 +51,7 @@ class LeftNav extends Component {
                     <img src={logo} alt="logo"/>
                     <h1>大马猴后台应用</h1>
                 </NavLink>
-                <Menu mode="inline" theme="dark" defaultSelectedKeys={[path]}>
+                <Menu mode="inline" theme="dark" defaultSelectedKeys={[path]} defaultOpenKeys={[this.openKey]}>
                     {this.menuNodes}
                 </Menu>
             </div>
