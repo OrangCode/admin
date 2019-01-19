@@ -32,7 +32,7 @@ export default class Category extends Component {
       isShowUpdata:false//是否显示更新框
   }
 
-  //获取一级/二级分类列表
+     //获取一级/二级分类列表
     getCategorys = async (pId) => {
       const parentId = pId || this.state.parentId
         const result = await reqGetCategorys(parentId)
@@ -49,7 +49,8 @@ export default class Category extends Component {
             }
         }
 }
-//显示二级分类列表
+
+    //显示二级分类列表
     showSubCategorys = (category) => {
         this.setState({
             parentId: category._id,
@@ -161,7 +162,7 @@ export default class Category extends Component {
         </Card>
         <Table
             columns={columns}
-            dataSource={parentId==='0'?categorys:subCategorys}
+            dataSource={parentId==='0'? categorys:subCategorys}
             bordered
             rowKey='_id'
             pagination={{defaultPageSize:10,showQuickJumper:true,showSizeChanger:true}}

@@ -22,8 +22,11 @@ class LeftNav extends Component {
                 )
                 pre.push(subMenu)
                 const path = this.props.location.pathname
-                const oItem = item.children.find((child => child.key === path))
-                if(oItem){this.openKey = item.key}
+                const oItem = item.children.find((child => path.indexOf(child.key) === 0))
+                if(oItem){
+                    this.openKey = item.key
+                    this.selectKey = oItem.key
+                }
             }else {
                 const menuItem = (
                     <Item key={item.key}>
@@ -44,7 +47,7 @@ class LeftNav extends Component {
     }
     render() {
         //当前请求的路径
-        const path = this.props.location.pathname
+        const path = this.selectKey || this.props.location.pathname
         return (
             <div className="left-nav">
                 <NavLink to="/home" className='logo'>
