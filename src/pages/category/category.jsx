@@ -116,7 +116,6 @@ export default class Category extends Component {
       this.columns = [{
           title: '分类名称',
           dataIndex: 'name',
-          // render: text => <a href="javascript:;">{text}</a>,
       }, {
           title: '操作',
           width:300,
