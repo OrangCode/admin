@@ -18,6 +18,8 @@ export const reqAddCategorys = (parentId,categoryName) => ajax('/manage/category
 export const reqUpdateCategorys = ({categoryId,categoryName}) => ajax('/manage/category/update',{categoryId,categoryName},'POST')
 //获取指定页的商品列表
 export const reqProducts = (pageNum,pageSize) => ajax('/manage/product/list',{pageNum,pageSize})
+//添加或者更新商品
+export const reqAddOrUpdateCategorys = (product) => ajax('/manage/product/' + (product._id ? 'update' : 'add'),product,'POST')
 //搜索商品分页列表
 export const reqSearchProducts = ({pageNum,pageSize,searchType,searchName}) => ajax('/manage/product/search',{
   pageNum,
@@ -38,3 +40,5 @@ export function reqWeather(city) {
         })
     })
 }
+//删除图片
+export const reqDeleteImg = (name) => ajax('/manage/img/delete',name,'POST')

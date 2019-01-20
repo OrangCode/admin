@@ -64,7 +64,6 @@ class ProductIndex extends Component {
     }else {
       result = await reqProducts(pageNum,3)
     }
-    console.log('aaaaaaaaaa',result)
     if(result.status === 0){
       const {total,list} = result.data
       this.setState({

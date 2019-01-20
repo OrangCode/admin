@@ -1,7 +1,10 @@
 import React, {Component} from 'react'
-import {Icon,Form,Button,Input,Select} from 'antd'
+import {Icon,Form,Button,Input,Select,message} from 'antd'
 
-import {reqGetCategorys} from '../../api'
+import PicturesWall from './pictures-wall'
+import RichTextEditor from './rich-text-editor'
+import {reqGetCategorys,reqAddOrUpdateCategorys} from '../../api'
+
 
 const Option = Select.Option
 const Item = Form.Item
@@ -9,6 +12,7 @@ const Item = Form.Item
 商品管理的更新/添加路由组件
  */
 class SaveUpdateProduct extends Component {
+
   state = {
     categorys:[],//一级分类列表
     subCategorys:[]//二级分类列表
@@ -48,9 +52,34 @@ class SaveUpdateProduct extends Component {
     this.getCategorys(parentId)
   }
 
-  //
-  submit = () => {
-    const values = this.props.form.getFieldsValue()
+  //添加或者更新商品
+  submit = async () => {
+    const {name,desc,price,category1,category2} = this.props.form.getFieldsValue()
+    let pCategoryId,categoryId
+    if(category2 === '未选择' || !category2){//当前要添加的商品是一级分类下的
+      pCategoryId = '0'
+      categoryId = category1
+    }else {//当前要添加的商品是二级分类下的
+      pCategoryId = category1
+      categoryId  = category2
+    }
+    //得到富文本的输入内容
+    const rich = this.refs.rich.getCategorys
+    //得到所上传的图片的文件名的数组
+    const imgs = this.refs.imgs.getImgs()
+    const product = {name,desc,price,categoryId,pCategoryId,imgs,rich}
+    //如果是更新，指定id属性
+    const p = this.props.location.state
+    if(p){
+      product._id = p._id
+    }
+    const result = await reqAddOrUpdateCategorys(product)
+    if(result.status === 0){
+      message.success('保存商品成功了')
+      this.props.history.goBack()
+    }else {
+      message.error('保存商品失败了，请重新处理')
+    }
   }
 
   componentDidMount(){
@@ -135,13 +164,13 @@ class SaveUpdateProduct extends Component {
                     ) : null
                   }
                 </Item>
-              <Item label="商品图片" {...formItemLayout}>
-                图片
+              <Item label="商品图片" {...formItemLayout} wrapperCol={{span:10}}>
+                <PicturesWall imgs={product.imgs} ref="imgs"/>
               </Item>
-              <Item label="商品详情" {...formItemLayout}>
-                富文本编辑器
+              <Item label="商品详情" {...formItemLayout} wrapperCol={{span:10}}>
+                <RichTextEditor ref="rich" rich={product.rich}/>
               </Item>
-                <Button type="primary" onClick={this.submit}>提交</Button>
+              <Button type="primary" onClick={this.submit} style={{marginLeft: 60}}>提交</Button>
             </Form>
         </div>
     )
