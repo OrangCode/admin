@@ -10,6 +10,8 @@ import jsonp from 'jsonp'
 export const reqLogin = (username,password) => ajax('/login',{username,password},'POST')
 //添加用户
 export const reqAddUser = (user) => ajax('http://localhost:5000/manage/category/list',{user},'POST')
+//根据分类ID，获取分类对象
+export const reqCategoryId = (categoryId) => ajax('/manage/category/info',{categoryId})
 //获取一级，二级的分类列表
 export const reqGetCategorys = (parentId) => ajax('/manage/category/list',{parentId})
 //添加分类
@@ -41,4 +43,6 @@ export function reqWeather(city) {
     })
 }
 //删除图片
-export const reqDeleteImg = (name) => ajax('/manage/img/delete',name,'POST')
+export const reqDeleteImg = (name) => ajax('/manage/img/delete',{name},'POST')
+//上架下架(更新商品管理）
+export const reqUpdataproduct = (productId,status) => ajax('/manage/product/updateStatus',{productId,status},'POST')

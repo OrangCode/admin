@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
-import {Select,Input,Icon,Card,Button,Table} from 'antd'
+import {Select,Input,Icon,Card,Button,Table,message} from 'antd'
 
-import {reqProducts,reqSearchProducts} from '../../api'
+import {reqProducts,reqUpdataproduct,reqSearchProducts} from '../../api'
 
 const Option = Select.Option
 /*
@@ -14,6 +14,16 @@ class ProductIndex extends Component {
     searchType:'productName',//搜索类型
     searchName:''//搜索关键字
   }
+
+  //更新指定产品的状态
+  updataStatusproduct = async (productId,status) => {
+    const result = await reqUpdataproduct(productId,status)
+    if(result.status === 0){
+      message.success('商品状态已经改变')
+      this.getProducts(this.pageNum || 1)
+    }
+}
+
 
   //初始化生成所有列的数组
   initColumns = () => {
@@ -34,19 +44,32 @@ class ProductIndex extends Component {
       {
         title:'状态',
         dataIndex:'status',
-        render:(status) => (
-          <span>
-            <Button>下架</Button>
-            &nbsp;&nbsp;
-            <span>在售</span>
-          </span>
-        )
+        render: (status, product) => {  // 1: 在售, 2: 已下架
+          let btnText = '下架'
+          let statusText = '在售'
+
+          if(status===2) {
+            btnText = '上架'
+            statusText = '已下架'
+          }
+
+          status = status===1 ? 2 : 1
+
+
+          return (
+            <span>
+              <Button type='primary' onClick={() => this.updataStatusproduct(product._id, status)}>{btnText}</Button>
+              &nbsp;&nbsp;
+              <span>{statusText}</span>
+            </span>
+          )
+        }
       },
       {
         title:'操作',
         render:(product)=> (
           <span>
-            <a href="javaScript:">详情</a>
+            <a href="javaScript:" onClick={()=>this.props.history.push('/product/productdetail',product)}>详情</a>
             &nbsp;&nbsp;&nbsp;
             <a href="javaScript:" onClick={()=> this.props.history.push('/product/saveproduct',product)}>修改</a>
           </span>
@@ -57,6 +80,7 @@ class ProductIndex extends Component {
 
   //异步获取指定页的数据
   getProducts = async (pageNum) => {
+    this.pageNum = pageNum
     const {searchName,searchType} = this.state
     let result
     if(searchName){
